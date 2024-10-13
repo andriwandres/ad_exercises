@@ -194,17 +194,17 @@ public final class CustomTreeSetTest {
     }
 
     @SafeVarargs
-    private <V> void assertOrderEquals(List<V> list, V... values) {
-        var order = list
+    private <V> void assertOrderEquals(List<V> actualValues, V... expectedValues) {
+        var actualOrder = actualValues
             .stream()
             .map(Object::toString)
             .collect(Collectors.joining(" "));
 
         var expectedOrder = Arrays
-            .stream(values)
+            .stream(expectedValues)
             .map(Object::toString)
             .collect(Collectors.joining(" "));
 
-        assertEquals(expectedOrder, order);
+        assertEquals(expectedOrder, actualOrder);
     }
 }
