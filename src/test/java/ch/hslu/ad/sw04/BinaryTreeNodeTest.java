@@ -5,40 +5,40 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public final class NodeTest {
+public final class BinaryTreeNodeTest {
     @Test()
     public void value_shouldReturnInitialValue() {
-        var node = new Node<>(123);
+        var node = new BinaryTreeNode<>(123);
 
         assertEquals(123, node.value());
     }
 
     @Test
     public void setLeftNode_shouldAssignNodeOnTheLeft() {
-        var node = new Node<>(3);
-        var newNode = new Node<>(2);
+        var node = new BinaryTreeNode<>(3);
+        var newNode = new BinaryTreeNode<>(2);
 
         node.setLeft(newNode);
 
-        assertEquals(newNode, node.getLeft());
+        assertEquals(newNode, node.left());
     }
 
     @Test
     public void setRightNode_shouldAssignNodeOnTheRight() {
-        var node = new Node<>(3);
-        var newNode = new Node<>(2);
+        var node = new BinaryTreeNode<>(3);
+        var newNode = new BinaryTreeNode<>(2);
 
         node.setRight(newNode);
 
-        assertEquals(newNode, node.getRight());
+        assertEquals(newNode, node.right());
     }
 
     @Test
     public void node_shouldBeEqualBasedOnTheirValue() {
         EqualsVerifier
-                .forClass(Node.class)
-                .withOnlyTheseFields("value")
-                .withGenericPrefabValues(Node.class, (x) -> null)
+                .forClass(BinaryTreeNode.class)
+                .withOnlyTheseFields("hashCode")
+                .withGenericPrefabValues(BinaryTreeNode.class, (x) -> null)
                 .verify();
     }
 }

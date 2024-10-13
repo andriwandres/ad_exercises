@@ -2,32 +2,35 @@ package ch.hslu.ad.sw04;
 
 import java.util.Objects;
 
-public final class Node<V extends Comparable<V>> {
+final class BinaryTreeNode<V extends Comparable<V>> {
     private final V value;
-    private Node<V> left;
-    private Node<V> right;
+    private final int hashCode;
 
-    public Node(V value) {
+    private BinaryTreeNode<V> left;
+    private BinaryTreeNode<V> right;
+
+    public BinaryTreeNode(V value) {
         this.value = value;
+        this.hashCode = Objects.hash(value);
     }
 
     public V value() {
         return value;
     }
 
-    public Node<V> getLeft() {
+    public BinaryTreeNode<V> left() {
         return left;
     }
 
-    public Node<V> getRight() {
+    public BinaryTreeNode<V> right() {
         return right;
     }
 
-    public void setLeft(Node<V> left) {
+    public void setLeft(BinaryTreeNode<V> left) {
         this.left = left;
     }
 
-    public void setRight(Node<V> right) {
+    public void setRight(BinaryTreeNode<V> right) {
         this.right = right;
     }
 
@@ -38,13 +41,13 @@ public final class Node<V extends Comparable<V>> {
     @Override
     public boolean equals(final Object obj) {
         return this == obj || (
-            obj instanceof Node<?> other &&
-            Objects.equals(value, other.value)
+            obj instanceof BinaryTreeNode<?> other &&
+            hashCode == other.hashCode
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return hashCode;
     }
 }

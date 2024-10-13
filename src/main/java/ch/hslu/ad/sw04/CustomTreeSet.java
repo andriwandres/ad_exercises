@@ -1,45 +1,45 @@
 package ch.hslu.ad.sw04;
 
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.TreeSet;
 
 public final class CustomTreeSet<V extends Comparable<V>> implements CustomTree<V> {
-    private Node<V> rootNode;
+    private BinaryTreeNode<V> rootNode;
     private int size = 0;
 
     @Override
-    public boolean add(V value) {
-        boolean successful = true;
+    public boolean add(final V value) {
+        var success = addRecursively(value, rootNode);
 
-        if (rootNode == null) {
-            rootNode = new Node<>(value);
-        } else {
-            successful = addToNode(value, rootNode);
-        }
-
-        if (successful) {
+        if (success) {
             size++;
         }
 
-        return successful;
+        return success;
     }
 
+    @SafeVarargs
     @Override
-    public boolean addMany(Iterable<? extends V> values) {
-        var successful = true;
+    public final boolean addMany(final V... values) {
+        var hasAddedAllElements = true;
         for (var value : values) {
             if (!add(value)) {
-                successful = false;
+                hasAddedAllElements = false;
             }
         }
 
-        return successful;
+        return hasAddedAllElements;
     }
 
     @Override
-    public boolean remove(V value) {
-        return false;
+    public boolean remove(final V value) {
+        int sizeBeforeRemoval = size;
+        rootNode = removeRecursively(value, rootNode);
+        return sizeBeforeRemoval != size;
+    }
+
+    @Override
+    public boolean search(final V value) {
+        return searchRecursively(value, rootNode);
     }
 
     @Override
@@ -48,78 +48,140 @@ public final class CustomTreeSet<V extends Comparable<V>> implements CustomTree<
     }
 
     @Override
-    public Iterator<V> iterator() {
-        return new PreOrderTreeIterator();
+    public Iterator<V> preorderIterator() {
+        return new PreorderIterator<>(rootNode);
     }
 
-    private boolean addToNode(V value, Node<V> node) {
+    @Override
+    public Iterator<V> postorderIterator() {
+        return new PostorderIterator<>(rootNode);
+    }
+
+    @Override
+    public Iterator<V> inorderIterator() {
+        return new InorderIterator<>(rootNode);
+    }
+
+    @Override
+    public Iterator<V> iterator() {
+        return preorderIterator();
+    }
+
+    private boolean searchRecursively(final V value, final BinaryTreeNode<V> node) {
+        if (node == null) {
+            return false;
+        }
+
+        int comparison = value.compareTo(node.value());
+
+        // Traverse to the left
+        var left = node.left();
+        if (comparison < 0 && left != null) {
+            return searchRecursively(value, left);
+        }
+
+        // Traverse to the right
+        var right = node.right();
+        if (comparison > 0 && right != null) {
+            return searchRecursively(value, right);
+        }
+
+        return comparison == 0;
+    }
+
+    private boolean addRecursively(final V value, final BinaryTreeNode<V> node) {
+        if (node == null) {
+            rootNode = new BinaryTreeNode<>(value);
+            return true;
+        }
+
         int comparison = value.compareTo(node.value());
 
         // Traverse to the left
         if (comparison < 0) {
-            var left = node.getLeft();
+            var left = node.left();
             if (left == null) {
-                node.setLeft(new Node<>(value));
+                node.setLeft(new BinaryTreeNode<>(value));
                 return true;
             }
 
-            return addToNode(value, left);
+            return addRecursively(value, left);
         }
 
         // Traverse to the right
         if (comparison > 0) {
-            var right = node.getRight();
+            var right = node.right();
             if (right == null) {
-                node.setRight(new Node<>(value));
+                node.setRight(new BinaryTreeNode<>(value));
                 return true;
             }
 
-            return addToNode(value, right);
+            return addRecursively(value, right);
         }
 
         // Duplicate value -> ignore
         return false;
     }
 
-    private final class PostOrderTreeIterator implements Iterator<V> {
-        private Node<V> currentNode;
-
-        @Override
-        public boolean hasNext() {
-            return false;
-        }
-
-        @Override
-        public V next() {
+    private BinaryTreeNode<V> removeRecursively(final V value, final BinaryTreeNode<V> node) {
+        // Node not found
+        if (node == null) {
             return null;
         }
+
+        int comparison = value.compareTo(node.value());
+
+        var left = node.left();
+        var right = node.right();
+
+        // Traverse to the left
+        if (comparison < 0) {
+            node.setLeft(removeRecursively(value, left));
+        }
+        // Traverse to the right
+        else if (comparison > 0) {
+            node.setRight(removeRecursively(value, right));
+        }
+        // Override node to remove it
+        else {
+            size--;
+
+            // Case 1: Node has no children
+            if (!node.hasChildren()) {
+                return null;
+            }
+
+            // Case 2: Node has one child
+            if (left == null) {
+                return right;
+            }
+            if (right == null) {
+                return left;
+            }
+
+            // Case 3: Node has two children:
+            // Find the smallest node of right subtree (in-order successor)
+            var inOrderSuccessor = findSmallestNode(node.right());
+
+            // Replace value with successor
+            var replacedNode = new BinaryTreeNode<>(inOrderSuccessor.value());
+            replacedNode.setLeft(node.left());
+
+            // Remove successor from right subtree
+            replacedNode.setRight(removeRecursively(inOrderSuccessor.value(), right));
+            return replacedNode;
+        }
+
+        return node;
     }
 
-    private final class PreOrderTreeIterator implements Iterator<V> {
-        private Node<V> currentNode;
+    private BinaryTreeNode<V> findSmallestNode(final BinaryTreeNode<V> node) {
+        var smallestNode = node;
 
-        @Override
-        public boolean hasNext() {
-            if (currentNode == null) {
-                return rootNode != null;
-            }
-
-            return currentNode.hasChildren();
+        while(smallestNode.left() != null) {
+            smallestNode = smallestNode.left();
         }
 
-        @Override
-        public V next() {
-            if (currentNode == null) {
-                return (currentNode = rootNode).value();
-            }
-
-            var leftNode = currentNode.getLeft();
-            if (leftNode != null) {
-                return (currentNode = leftNode).value();
-            }
-
-            var rightNode = currentNode.getRight();
-            return (currentNode = rightNode).value();
-        }
+        return smallestNode;
     }
 }
