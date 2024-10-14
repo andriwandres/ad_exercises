@@ -7,7 +7,7 @@ final class PostorderIterator<V extends Comparable<V>> implements Iterator<V> {
     private final Stack<BinaryTreeNode<V>> currentGraph = new Stack<>();
 
     public PostorderIterator(final BinaryTreeNode<V> rootNode) {
-        appendLeftMostGraphFrom(rootNode);
+        appendGraphDownwardsFrom(rootNode);
     }
 
     @Override
@@ -24,23 +24,24 @@ final class PostorderIterator<V extends Comparable<V>> implements Iterator<V> {
 
             assert head != null;
             if (currentNode == head.left()) {
-                appendLeftMostGraphFrom(head.right());
+                appendGraphDownwardsFrom(head.right());
             }
         }
 
         return currentNode.value();
     }
 
-    private void appendLeftMostGraphFrom(BinaryTreeNode<V> node) {
-        while (node != null) {
-            currentGraph.push(node);
-            var left = node.left();
-            var right = node.right();
+    private void appendGraphDownwardsFrom(final BinaryTreeNode<V> node) {
+        var currentNode = node;
+        while (currentNode != null) {
+            currentGraph.push(currentNode);
+            var left = currentNode.left();
+            var right = currentNode.right();
 
             if (left != null) {
-                node = left;
+                currentNode = left;
             } else {
-                node = right;
+                currentNode = right;
             }
         }
     }

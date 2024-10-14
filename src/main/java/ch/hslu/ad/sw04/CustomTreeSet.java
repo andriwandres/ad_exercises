@@ -161,7 +161,7 @@ public final class CustomTreeSet<V extends Comparable<V>> implements CustomTree<
 
             // Case 3: Node has two children:
             // Find the smallest node of right subtree (in-order successor)
-            var inOrderSuccessor = findSmallestNode(node.right());
+            var inOrderSuccessor = findSmallestNodeFrom(node.right());
 
             // Replace value with successor
             var replacedNode = new BinaryTreeNode<>(inOrderSuccessor.value());
@@ -175,7 +175,7 @@ public final class CustomTreeSet<V extends Comparable<V>> implements CustomTree<
         return node;
     }
 
-    private BinaryTreeNode<V> findSmallestNode(final BinaryTreeNode<V> node) {
+    private BinaryTreeNode<V> findSmallestNodeFrom(final BinaryTreeNode<V> node) {
         var smallestNode = node;
 
         while(smallestNode.left() != null) {

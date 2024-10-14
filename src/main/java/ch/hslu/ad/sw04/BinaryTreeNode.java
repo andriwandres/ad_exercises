@@ -9,7 +9,7 @@ final class BinaryTreeNode<V extends Comparable<V>> {
     private BinaryTreeNode<V> left;
     private BinaryTreeNode<V> right;
 
-    public BinaryTreeNode(V value) {
+    public BinaryTreeNode(final V value) {
         this.value = value;
         this.hashCode = Objects.hash(value);
     }
@@ -26,11 +26,11 @@ final class BinaryTreeNode<V extends Comparable<V>> {
         return right;
     }
 
-    public void setLeft(BinaryTreeNode<V> left) {
+    public void setLeft(final BinaryTreeNode<V> left) {
         this.left = left;
     }
 
-    public void setRight(BinaryTreeNode<V> right) {
+    public void setRight(final BinaryTreeNode<V> right) {
         this.right = right;
     }
 

@@ -4,32 +4,32 @@ import java.util.Iterator;
 import java.util.Stack;
 
 final class PreorderIterator<V extends Comparable<V>> implements Iterator<V> {
-    private final Stack<BinaryTreeNode<V>> stack = new Stack<>();
+    private final Stack<BinaryTreeNode<V>> currentGraph = new Stack<>();
 
     public PreorderIterator(final BinaryTreeNode<V> rootNode) {
         if (rootNode != null) {
-            stack.push(rootNode);
+            currentGraph.push(rootNode);
         }
     }
 
     @Override
     public boolean hasNext() {
-        return !stack.isEmpty();
+        return !currentGraph.isEmpty();
     }
 
     @Override
     public V next() {
-        var currentNode = stack.pop();
+        var currentNode = currentGraph.pop();
 
         var right = currentNode.right();
         var left = currentNode.left();
 
         if (right != null) {
-            stack.push(right);
+            currentGraph.push(right);
         }
 
         if (left != null) {
-            stack.push(left);
+            currentGraph.push(left);
         }
 
         return currentNode.value();
