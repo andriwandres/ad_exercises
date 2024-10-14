@@ -2,6 +2,7 @@ package ch.hslu.ad.sw04;
 
 import org.junit.jupiter.api.Test;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -193,17 +194,43 @@ public final class CustomTreeSetTest {
         assertOrderEquals(iterated, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     }
 
+    @Test
+    public void iterator_shouldDefaultToInOrderIterator() {
+        var tree = new CustomTreeSet<Integer>();
+        tree.addMany(6, 3, 9, 1, 4, 8, 10, 2, 5, 7);
+
+        var iterator = tree.iterator();
+        var iterated = new ArrayList<Integer>();
+
+        while(iterator.hasNext()) {
+            iterated.add(iterator.next());
+        }
+
+        var inorderIterator = tree.inorderIterator();
+        var iteratedInOrder = new ArrayList<Integer>();
+
+        while(inorderIterator.hasNext()) {
+            iteratedInOrder.add(inorderIterator.next());
+        }
+
+        assertOrderEquals(iteratedInOrder, iterated);
+    }
+
     @SafeVarargs
     private <V> void assertOrderEquals(List<V> actualValues, V... expectedValues) {
-        var actualOrder = actualValues
-            .stream()
-            .map(Object::toString)
-            .collect(Collectors.joining(" "));
+        assertOrderEquals(actualValues, List.of(expectedValues));
+    }
 
-        var expectedOrder = Arrays
-            .stream(expectedValues)
-            .map(Object::toString)
-            .collect(Collectors.joining(" "));
+    private <V> void assertOrderEquals(List<V> actualValues, List<V> expectedValues) {
+        var actualOrder = actualValues
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(" "));
+
+        var expectedOrder = expectedValues
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(" "));
 
         assertEquals(expectedOrder, actualOrder);
     }

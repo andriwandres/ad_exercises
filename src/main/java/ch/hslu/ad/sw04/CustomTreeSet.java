@@ -64,7 +64,7 @@ public final class CustomTreeSet<V extends Comparable<V>> implements CustomTree<
 
     @Override
     public Iterator<V> iterator() {
-        return preorderIterator();
+        return inorderIterator();
     }
 
     private boolean searchRecursively(final V value, final BinaryTreeNode<V> node) {
