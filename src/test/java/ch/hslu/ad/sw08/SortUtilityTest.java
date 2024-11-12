@@ -8,12 +8,59 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class SortUtilityTest {
     @Test
-    public void insertionSort_shouldSortArrayOfIntegers() {
-        var array = new Integer[] { 5, 3, 8, 4, 2 };
+    public void insertionSort_shouldNotChangeArray_whenArrayIsEmpty() {
+        var array = new Integer[] {  };
+
+        SortUtility.insertionSort(array);
+
+        assertEquals(0, array.length);
+    }
+
+    @Test
+    public void insertionSort_shouldNotChangeArray_whenAllElementsAreEqual() {
+        var array = new Integer[] { 1, 1, 1 };
+
+        SortUtility.insertionSort(array);
+
+        assertOrderEquals(array, 1, 1, 1);
+    }
+
+    @Test
+    public void insertionSort_shouldNotChangeArray_whenAlreadySorted() {
+        var array = new Integer[] { 1, 2, 3, 4, 5 };
 
         SortUtility.insertionSort(array);
 
         assertOrderEquals(array, 1, 2, 3, 4, 5);
+    }
+
+    @Test
+    public void insertionSort_shouldSortArrayOfIntegers() {
+        var array = new Integer[] { 5, 3, 1, 4, 2 };
+
+        SortUtility.insertionSort(array);
+
+        assertOrderEquals(array, 1, 2, 3, 4, 5);
+    }
+
+    @Test
+    public void insertionSort_shouldSortArrayOfObjects() {
+        var array = new SortableItem[] {
+            new SortableItem(3),
+            new SortableItem(1),
+            new SortableItem(2),
+            new SortableItem(5),
+            new SortableItem(4),
+        };
+
+        SortUtility.insertionSort(array);
+
+        var integers = Arrays
+            .stream(array)
+            .map(SortableItem::integer)
+            .toArray();
+
+        assertOrderEquals(integers, 1, 2, 3, 4, 5);
     }
 
     @SafeVarargs
@@ -22,5 +69,17 @@ public final class SortUtilityTest {
         var expectedOrder = Arrays.toString(expectedValues);
 
         assertEquals(expectedOrder, actualOrder);
+    }
+}
+
+record SortableItem(int integer) implements Comparable<SortableItem> {
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof SortableItem other && integer == other.integer;
+    }
+
+    @Override
+    public int compareTo(SortableItem other) {
+        return Integer.compare(integer, other.integer);
     }
 }
