@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public final class SortUtilityTest {
+public final class InsertionSortTest {
     @Test
     public void insertionSort_shouldNotChangeArray_whenArrayIsEmpty() {
         var array = new Integer[] {  };
@@ -69,17 +69,5 @@ public final class SortUtilityTest {
         var expectedOrder = Arrays.toString(expectedValues);
 
         assertEquals(expectedOrder, actualOrder);
-    }
-}
-
-record SortableItem(int integer) implements Comparable<SortableItem> {
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof SortableItem other && integer == other.integer;
-    }
-
-    @Override
-    public int compareTo(SortableItem other) {
-        return Integer.compare(integer, other.integer);
     }
 }
