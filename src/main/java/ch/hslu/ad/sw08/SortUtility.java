@@ -72,4 +72,27 @@ public final class SortUtility {
             }
         }
     }
+
+    public static <T extends Comparable<T>> void shellSort(final T[] array)
+    {
+        final int length = array.length;
+
+        // Half the gap after every sorting phase
+        for (int gap = length / 2; gap > 0; gap /= 2)
+        {
+            // Do an insertion sort with a gap
+            for (int i = gap; i < length; i++)
+            {
+                final T temporary = array[i];
+                int j = i;
+
+                while (j >= gap && array[j - gap].compareTo(temporary) > 0) {
+                    array[j] = array[j - gap];
+                    j -= gap;
+                }
+
+                array[j] = temporary;
+            }
+        }
+    }
 }

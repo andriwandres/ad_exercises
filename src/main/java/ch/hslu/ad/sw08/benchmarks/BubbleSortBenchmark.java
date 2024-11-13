@@ -10,9 +10,13 @@ public final class BubbleSortBenchmark {
         BenchmarkUtilities.benchmark(
                 ITERATIONS,
                 WARMUP_ITERATIONS,
-                BubbleSortBenchmark::with100kRandomElements,
+                BubbleSortBenchmark::with200kInverseOrderedElements,
                 SortUtility::bubbleSort
         );
+    }
+
+    private static Integer[] with50kRandomElements() {
+        return BenchmarkUtilities.getRandomArray(50_000);
     }
 
     private static Integer[] with100kRandomElements() {
@@ -23,15 +27,11 @@ public final class BubbleSortBenchmark {
         return BenchmarkUtilities.getRandomArray(200_000);
     }
 
-    private static Integer[] with400kRandomElements() {
-        return BenchmarkUtilities.getRandomArray(400_000);
+    private static Integer[] with200kOrderedElements() {
+        return BenchmarkUtilities.getOrderedArray(200_000);
     }
 
-    private static Integer[] with400kOrderedElements() {
-        return BenchmarkUtilities.getOrderedArray(400_000);
-    }
-
-    private static Integer[] with400kInverseOrderedElements() {
-        return BenchmarkUtilities.getInverseOrderedArray(400_000);
+    private static Integer[] with200kInverseOrderedElements() {
+        return BenchmarkUtilities.getInverseOrderedArray(200_000);
     }
 }
