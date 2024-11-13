@@ -2,16 +2,16 @@ package ch.hslu.ad.sw08.benchmarks;
 
 import ch.hslu.ad.sw08.SortUtility;
 
-public final class InsertionSortBenchmark {
+public final class BinaryInsertionSortBenchmark {
     private static final int ITERATIONS = 10;
-    private static final int WARMUP_ITERATIONS = 5;
+    private static final int WARMUP_ITERATIONS = 10;
 
     public static void main(String[] args) throws Exception {
         BenchmarkUtilities.benchmark(
                 ITERATIONS,
                 WARMUP_ITERATIONS,
-                InsertionSortBenchmark::with400kOrderedElements,
-                SortUtility::insertionSort
+                BinaryInsertionSortBenchmark::with400kOrderedElements,
+                SortUtility::binaryInsertionSort
         );
     }
 

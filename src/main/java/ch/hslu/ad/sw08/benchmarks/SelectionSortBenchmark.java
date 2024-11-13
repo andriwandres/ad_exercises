@@ -2,7 +2,7 @@ package ch.hslu.ad.sw08.benchmarks;
 
 import ch.hslu.ad.sw08.SortUtility;
 
-public final class InsertionSortBenchmark {
+public final class SelectionSortBenchmark {
     private static final int ITERATIONS = 10;
     private static final int WARMUP_ITERATIONS = 5;
 
@@ -10,8 +10,8 @@ public final class InsertionSortBenchmark {
         BenchmarkUtilities.benchmark(
                 ITERATIONS,
                 WARMUP_ITERATIONS,
-                InsertionSortBenchmark::with400kOrderedElements,
-                SortUtility::insertionSort
+                SelectionSortBenchmark::with400kInverseOrderedElements,
+                SortUtility::selectionSort
         );
     }
 
