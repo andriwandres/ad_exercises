@@ -27,6 +27,10 @@ public final class ShellSortBenchmark {
         return BenchmarkUtilities.getRandomArray(400_000);
     }
 
+    private static Integer[] with1mRandomElements() {
+        return BenchmarkUtilities.getRandomArray(1_000_000);
+    }
+
     private static Integer[] with400kOrderedElements() {
         return BenchmarkUtilities.getOrderedArray(400_000);
     }

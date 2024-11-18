@@ -35,7 +35,6 @@ public final class SortUtility {
 
     public static <T extends Comparable<T>> void selectionSort(final T[] array) {
         for (int i = 0; i < array.length; i++) {
-
             int indexOfSmallestElement = i;
 
             // Iterate through unsorted portion of the array and find the smallest element
