@@ -1,9 +1,11 @@
 package ch.hslu.ad.sw08;
 
+import java.util.Objects;
+
 public record Triangle(Point a, Point b, Point c) implements Comparable<Triangle> {
     @Override
-    public int compareTo(Triangle other) {
-        return Double.compare(circumference(), other.circumference());
+    public int compareTo(final Triangle other) {
+        return Objects.compare(this, other, new TriangleCircumferenceComparator());
     }
 
     public double circumference() {
